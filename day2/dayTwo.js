@@ -13,4 +13,34 @@ function readFile(filePath) {
 const adventOfCodeInput = readFile('./day2/input.txt');
 // END OF GET FILE INPUT
 
-console.log(adventOfCodeInput);
+const gamesArray = adventOfCodeInput.split('\r\n');
+
+let total = 0;
+
+gamesArray.forEach((line) => {
+    const highScores = {
+        red: 12,
+        green: 13,
+        blue: 14,
+    };
+
+    const [game, results] = line.split(': ');
+    const gameID = Number(game.split(' ')[1]);
+    const rounds = results.split('; ');
+
+    let impossible = false;
+    for (const round of rounds) {
+        const dicePulls = round.split(', ');
+
+        for (const result of dicePulls) {
+            const [amount, colour] = result.split(' ');
+
+            if (Number(amount) > highScores[colour]) {
+                impossible = true;
+            }
+        }
+    }
+    return impossible ? true : (total += gameID);
+});
+
+console.log(total);
